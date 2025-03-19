@@ -76,7 +76,8 @@
           $gte: startOfMonth, // Greater than or equal to start of month
           $lte: endOfMonth,   // Less than or equal to end of month
         },
-      }).populate('category');
+      }).populate('category')
+      .sort({ date: -1 }); // Sort by date in descending order
   
       if (!expenses.length) {
         return res.status(404).json({ message: 'No expenses found for this month!' });
