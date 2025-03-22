@@ -15,25 +15,26 @@ app.use(cookieParser());
 app.use(
   cors({
     credentials: true,
-    origin: function(origin, callback) {
+    origin: function (origin, callback) {
       // Allow requests from these origins
       const allowedOrigins = [
-        'http://localhost:5173',  // Local development
-        process.env.CORS_ORIGIN,  // Production frontend URL
+        "http://localhost:5173", // Local development
+        "https://kharchez.vercel.app", // Add your production URL here
+        process.env.CORS_ORIGIN, // Production frontend URL from env (if applicable)
       ].filter(Boolean); // Remove any undefined entries
-      
+
       // For non-browser requests or testing
-      const originToAllow = !origin || allowedOrigins.includes(origin) ? origin : allowedOrigins[0];
-      
+      const originToAllow =
+        !origin || allowedOrigins.includes(origin) ? origin : allowedOrigins[0];
+
       callback(null, originToAllow);
     },
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization"]
+    allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
-
 // Handle preflight requests explicitly
-app.options('*', cors());
+app.options("*", cors());
 
 // Connect to MongoDB
 connectToDB();
@@ -54,5 +55,9 @@ app.use("/api/expenses", isUserAuthenticated, expenseRouter);
 // Start Server
 app.listen(PORT, "0.0.0.0", () => {
   console.log(`Server is running on PORT: ${PORT}`);
-  console.log(`Allowed CORS origin(s): ${process.env.CORS_ORIGIN || 'http://localhost:5173'}`);
+  console.log(
+    `Allowed CORS origin(s): ${
+      process.env.CORS_ORIGIN || "http://localhost:5173"
+    }`
+  );
 });
